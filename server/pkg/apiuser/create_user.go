@@ -13,7 +13,7 @@ func CreateUser(c *gin.Context) {
 	status := c.Writer.Status()
 	fmt.Println("status", status)
 	c.JSON(200, gin.H{
-		"status":   "success",
+		"status":   "successssssssss",
 		"userName": userName,
 		"password": password,
 	})

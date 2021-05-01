@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"../datamodel"
-	"../pkg/apiuser"
+	"github.com/Ekkawin/golang/server/datamodel"
+	"github.com/Ekkawin/golang/server/pkg/apiuser"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
@@ -22,7 +22,7 @@ func main() {
 	db.AutoMigrate(&datamodel.Product{})
 
 	// Create
-	db.Create(&datamodel.Product{Code: "D42", Price: 100})
+	db.Create(&datamodel.Product{Code: "D43", Price: 10})
 
 	// myRouter := mux.NewRouter()
 	myRouter := gin.Default()
