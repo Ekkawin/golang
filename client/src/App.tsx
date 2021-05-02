@@ -3,12 +3,16 @@ import './style.css';
 import './tailwind.css';
 import { Switch, Route } from 'react-router-dom';
 import { LoginPage } from './features/LoginPage';
+import { RegisterPage } from './features/RegisterPage';
 
 function App() {
   return (
     <Switch>
-      <Route path="/">
+      <Route exact path="/">
         <LoginPage />
+      </Route>
+      <Route path="/register">
+        <RegisterPage />
       </Route>
     </Switch>
     // <div className="App">
