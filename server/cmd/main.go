@@ -20,6 +20,7 @@ func main() {
 	fmt.Println(err, "err")
 
 	db.AutoMigrate(&datamodel.Product{})
+	db.AutoMigrate(&datamodel.User{})
 
 	// Create
 	// db.Create(&datamodel.Product{Code: "D43", Price: 10})
