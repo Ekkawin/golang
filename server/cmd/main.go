@@ -22,11 +22,12 @@ func main() {
 	db.AutoMigrate(&datamodel.Product{})
 
 	// Create
-	db.Create(&datamodel.Product{Code: "D43", Price: 10})
+	// db.Create(&datamodel.Product{Code: "D43", Price: 10})
 
 	// myRouter := mux.NewRouter()
 	myRouter := gin.Default()
 	myRouter.Use(cors.Default())
+	au := apiuser.Initialize(db)
 
 	// myRouter.GET("/aek", func(w http.ResponseWriter, r *http.Request) {
 	// 	fmt.Fprintf(w, "hi my name is aek")
@@ -34,7 +35,7 @@ func main() {
 	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 	// 	fmt.Fprintf(w, "aek")
 	// })
-	myRouter.GET("/:userName/:password", apiuser.CreateUser)
+	myRouter.POST("/user", au.CreateUser)
 
 	myRouter.Run(":8080")
 	// http.ListenAndServe(":8080", myRouter)

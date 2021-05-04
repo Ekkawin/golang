@@ -14,6 +14,9 @@ function App() {
       <Route path="/register">
         <RegisterPage />
       </Route>
+      <Route path="/home">
+        <div>hi, this is home page</div>
+      </Route>
     </Switch>
     // <div className="App">
     //   <header className="App-header">

@@ -5,9 +5,11 @@ import React, { useState } from 'react';
 import { createUser } from '../api/createUser';
 import { PageWrapper } from './PageWrapper';
 import { css, jsx } from '@emotion/react';
+import { useHistory } from 'react-router-dom';
 
 export const RegisterPage = () => {
   const [form] = Form.useForm();
+  const history = useHistory();
   const [creating, setCreating] = useState(false);
 
   const onFinish = async (value: any) => {
@@ -15,6 +17,7 @@ export const RegisterPage = () => {
     try {
       setCreating(true);
       await createUser({ email, password });
+      history.push('/home');
     } catch (error) {
       console.error(error);
     } finally {

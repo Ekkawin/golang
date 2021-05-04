@@ -6,11 +6,10 @@ interface Props {
 export const createUser = ({ email, password }: Props) => {
   console.log(`email`, email);
   console.log(`password`, password);
-  //   const response = Axios.post(`/user`, {
-  //     email,
-  //     password,
-  //   });
+  const response = Axios.post(`/user`, {
+    email,
+    password,
+  });
 
-  // return response;
-  return 'asdf';
+  return response;
 };
