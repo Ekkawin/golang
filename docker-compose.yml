@@ -1,13 +1,13 @@
-version: '3'
+version: '3.7'
 services:
   db:
-    image: 'postgres:12'
+    image: postgres:12
     environment:
-      POSTGRES_USER: 'aek'
-      POSTGRES_PASSWORD: 'aek'
-      POSTGRES_DB: 'todo_list'
+      POSTGRES_USER: aek
+      POSTGRES_PASSWORD: aek
+      POSTGRES_DB: todo_list
     ports:
-      - 5432:5432
+      - '5432:5432'
     volumes:
       - ./volumes/db/:/var/lib/postgresql/data/
-    restart: 'always'
+    restart: always

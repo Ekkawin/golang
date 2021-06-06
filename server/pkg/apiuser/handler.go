@@ -9,12 +9,12 @@ type UserHandler struct {
 	db *gorm.DB
 }
 
-func Initialize(db *gorm.DB) Handler {
+func NewGetUserHandler(db *gorm.DB) UserHandlerController {
 	return &UserHandler{
 		db: db,
 	}
 }
 
-type Handler interface {
+type UserHandlerController interface {
 	CreateUser(c *gin.Context)
 }
