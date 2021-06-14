@@ -1,4 +1,4 @@
-package coreuser
+package coreuploadfile
 
 import (
 	"github.com/Ekkawin/golang/server/datamodel"
@@ -17,6 +17,5 @@ func NewService(pg *gorm.DB) Service {
 }
 
 type Service interface {
-	UserCreate(user *datamodel.User)
-	ListUser() []datamodel.User
+	CreateMovieGenere(user *datamodel.User)
 }

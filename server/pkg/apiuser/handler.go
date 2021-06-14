@@ -17,4 +17,5 @@ func NewGetUserHandler(db *gorm.DB) UserHandlerController {
 
 type UserHandlerController interface {
 	CreateUser(c *gin.Context)
+	ListHandler(c *gin.Context)
 }

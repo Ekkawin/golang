@@ -13,7 +13,7 @@ import (
 
 func main() {
 
-	dsn := "host=localhost user=aek password=aek dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	dsn := "host=localhost user=aek password=aek dbname=todo_list port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	fmt.Println(db, "db")
@@ -36,6 +36,7 @@ func main() {
 	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 	// 	fmt.Fprintf(w, "aek")
 	// })
+	myRouter.GET("/users", au.ListHandler)
 	myRouter.POST("/user", au.CreateUser)
 	myRouter.POST("/upload-file")
 
