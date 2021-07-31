@@ -12,18 +12,10 @@ import (
 	"gorm.io/gorm"
 )
 
-type initializeDb struct {
-	pg *gorm.DB
-}
-
 type User struct {
 	FirstName string
 	LastName  string
 }
-
-// type Genere struct {
-// 	Name string
-// }
 
 func convertUserToActor(u []User) []datamodel.Actor {
 	var a []datamodel.Actor
@@ -40,29 +32,29 @@ func convertUserToDirector(u []User) []datamodel.Director {
 	}
 	return d
 }
-func findDirector(d datamodel.Director, directorDB []datamodel.Director) datamodel.Director {
 
-	for _, director := range directorDB {
-		if director.FirstName == d.FirstName && director.LastName == d.LastName {
-			return director
-
-		}
-
-	}
-	return datamodel.Director{}
-}
 func findActors(a []string, act map[string]datamodel.Actor) []datamodel.Actor {
 	ac := make([]datamodel.Actor, 0)
 	for _, actor := range a {
-		ac = append(ac, act[actor.FirstName+actor.LastName])
+		var firstName string
+		var lastName string
+		splittedName := strings.Split(actor, " ")
+		if len(splittedName) == 1 {
+			firstName = splittedName[0]
+			lastName = splittedName[0]
+		} else {
+			firstName = splittedName[0]
+			lastName = splittedName[1]
+		}
+		ac = append(ac, act[firstName+lastName])
+
 	}
 
 	return ac
 
 }
 func findGeneres(g []string, gen map[string]datamodel.Genere) []datamodel.Genere {
-	fmt.Println(gen, "gen")
-	// fmt.Println(g[1], "g")
+
 	ge := make([]datamodel.Genere, 0)
 	for _, genere := range g {
 		ge = append(ge, gen[genere])
@@ -76,12 +68,17 @@ func ValidateUser(a []User, x string) (User, error) {
 	var firstName string
 	var lastName string
 	splittedName := strings.Split(x, " ")
-	if len(splittedName) == 1 {
+	if nameLength := len(splittedName); nameLength == 1 {
 		firstName = splittedName[0]
 		lastName = splittedName[0]
-	} else {
+	} else if nameLength == 2 {
 		firstName = splittedName[0]
 		lastName = splittedName[1]
+	} else {
+		name := strings.Join(splittedName[0:nameLength-1], ",")
+		firstName = name
+		lastName = splittedName[nameLength-1]
+
 	}
 
 	if numberOfUser := len(a); numberOfUser == 0 {
@@ -113,13 +110,32 @@ func ValidateGenere(g []datamodel.Genere, ng string) (datamodel.Genere, error) {
 	}
 }
 
+func MatchDirector(d string) string {
+	var firstName string
+	var lastName string
+	splittedName := strings.Split(d, " ")
+	if nameLength := len(splittedName); nameLength == 1 {
+		firstName = splittedName[0]
+		lastName = splittedName[0]
+	} else if nameLength == 2 {
+		firstName = splittedName[0]
+		lastName = splittedName[1]
+	} else {
+		name := strings.Join(splittedName[0:nameLength-1], ",")
+		firstName = name
+		lastName = splittedName[nameLength-1]
+
+	}
+	return (firstName + " " + lastName)
+
+}
+
 func InitializeInformationDb(db *gorm.DB) {
 
 	csvFile, err := os.Open(".././IMDB-Movie-Data.csv")
 	if err != nil {
 		fmt.Println(err)
 	}
-	// fmt.Println(&csvFile, "Successfully Opened CSV file")
 
 	csvLines, err := csv.NewReader(csvFile).ReadAll()
 	if err != nil {
@@ -190,15 +206,13 @@ func InitializeInformationDb(db *gorm.DB) {
 	actorDB := convertUserToActor(actors)
 	directorDB := convertUserToDirector(directors)
 
-	// fmt.Println(generes, " generes")
-	// fmt.Println(actorDB, " actors")
-	// fmt.Println(directorDB, " directors")
 	defer csvFile.Close()
 
-	db.AutoMigrate(&datamodel.Actor{})
+	db.AutoMigrate(&datamodel.Movie{})
 	db.AutoMigrate(&datamodel.Director{})
+	db.AutoMigrate(&datamodel.Actor{})
 	db.AutoMigrate(&datamodel.Genere{})
-	fmt.Println("hi")
+
 	db.Model(&datamodel.Genere{}).Create(generes)
 	db.Model(datamodel.Actor{}).CreateInBatches(actorDB, 10)
 	db.Model(datamodel.Director{}).CreateInBatches(directorDB, 10)
@@ -207,6 +221,12 @@ func InitializeInformationDb(db *gorm.DB) {
 	for _, oa := range actorDB {
 		act[oa.FirstName+oa.LastName] = oa
 	}
+
+	dir := make(map[string]datamodel.Director)
+	for _, od := range directorDB {
+		dir[od.FirstName+" "+od.LastName] = od
+	}
+
 	gen := make(map[string]datamodel.Genere)
 	for _, g := range generes {
 		gen[g.Name] = g
@@ -219,14 +239,17 @@ func InitializeInformationDb(db *gorm.DB) {
 			g := strings.Split(movieLine[2], ",")
 			generes :=
 				findGeneres(g, gen)
-			actors := make([]datamodel.Actor, 0)
-			actors = ValidateUser(actors, strings.Split(movieLine[5], ", "))
-			fmt.Println(actors, "actors")
+			a := strings.Split(movieLine[5], ", ")
+			actors := findActors(a, act)
+			dn := MatchDirector(movieLine[4])
+			director := dir[dn]
 
-			movies = append(movies, datamodel.Movie{Title: movieLine[1], Description: movieLine[3], Generes: generes, Rank: movieLine[0], Year: movieLine[6], RunTime: movieLine[7], Vote: movieLine[9], Rating: movieLine[8], MetaScore: movieLine[11], Revenue: movieLine[10]})
+			movies = append(movies, datamodel.Movie{Title: movieLine[1], Description: movieLine[3], Generes: generes, DirectorID: director.DirectorID, Actors: actors, Rank: movieLine[0], Year: movieLine[6], RunTime: movieLine[7], Vote: movieLine[9], Rating: movieLine[8], MetaScore: movieLine[11], Revenue: movieLine[10]})
 
 		}
 
 	}
+
+	db.Model(datamodel.Movie{}).CreateInBatches(movies, 1)
 
 }

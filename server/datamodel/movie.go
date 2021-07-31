@@ -9,9 +9,9 @@ type Movie struct {
 	MovieID     uuid.UUID `gorm:"primaryKey"`
 	Title       string
 	Description string
-	Actor       []Actor
-	Generes     []Genere
-	Director    Director
+	Actors      []Actor  `gorm:"many2many:movie_actors;"`
+	Generes     []Genere `gorm:"many2many:movie_generes;"`
+	DirectorID  uuid.UUID
 	Rank        string
 	Year        string
 	RunTime     string
@@ -20,32 +20,8 @@ type Movie struct {
 	Revenue     string
 	MetaScore   string
 }
-type Actor struct {
-	ActorID   uuid.UUID `gorm:"primaryKey"`
-	FirstName string
-	LastName  string
-}
-type Director struct {
-	DirectorID uuid.UUID `gorm:"primaryKey"`
-	FirstName  string
-	LastName   string
-}
 
-type Genere struct {
-	GenereID uuid.UUID `gorm:"primaryKey"`
-	Name     string
-}
-
-func (g *Genere) BeforeCreate(tx *gorm.DB) (err error) {
-	g.GenereID = uuid.New()
-	return
-}
-
-func (d *Director) BeforeCreate(tx *gorm.DB) (err error) {
-	d.DirectorID = uuid.New()
-	return
-}
-func (a *Actor) BeforeCreate(tx *gorm.DB) (err error) {
-	a.ActorID = uuid.New()
+func (m *Movie) BeforeCreate(tx *gorm.DB) (err error) {
+	m.MovieID = uuid.New()
 	return
 }

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	initializeDb "github.com/Ekkawin/golang/server/datamodel/seed"
+	initializeDb "github.com/Ekkawin/golang/server/datamodel/initialDB"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
