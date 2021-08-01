@@ -2,8 +2,13 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
+	coremovie "github.com/Ekkawin/golang/server/core/movie"
 	initializeDb "github.com/Ekkawin/golang/server/datamodel/initialDB"
+	"github.com/Ekkawin/golang/server/pkg/apimovie"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -22,18 +27,13 @@ func main() {
 	initializeDb.InitializeInformationDb(db)
 	fmt.Println(err)
 
-	// fmt.Println(db, "db")
-	// fmt.Println(err, "err")
-
-	// db.AutoMigrate(&datamodel.Product{})
-	// db.AutoMigrate(&datamodel.User{})
-
-	// // Create
-	// // db.Create(&datamodel.Product{Code: "D43", Price: 10})
-
 	// // myRouter := mux.NewRouter()
-	// myRouter := gin.Default()
-	// myRouter.Use(cors.Default())
+	myRouter := gin.Default()
+	myRouter.Use(cors.Default())
+
+	movieService := coremovie.NewService(db)
+	apimovie.MovieHandler(myRouter, movieService)
+
 	// au := apiuser.NewGetUserHandler(db)
 
 	// // myRouter.GET("/aek", func(w http.ResponseWriter, r *http.Request) {
@@ -46,6 +46,6 @@ func main() {
 	// myRouter.POST("/user", au.CreateUser)
 	// myRouter.POST("/upload-file")
 
-	// myRouter.Run(":8080")
-	// http.ListenAndServe(":8080", myRouter)
+	myRouter.Run(":8080")
+	http.ListenAndServe(":8080", myRouter)
 }
