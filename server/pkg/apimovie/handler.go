@@ -29,6 +29,6 @@ type MovieController interface {
 func (mc moviecontroller) ListMovieController(c *gin.Context) {
 	fmt.Println("hi")
 	a := mc.service.ListMovie()
-	fmt.Println(a, "a")
+	fmt.Printf("a=%+v", a)
 
 }
