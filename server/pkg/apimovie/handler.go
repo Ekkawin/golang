@@ -1,6 +1,8 @@
 package apimovie
 
 import (
+	"fmt"
+
 	coremovie "github.com/Ekkawin/golang/server/core/movie"
 	"github.com/gin-gonic/gin"
 )
@@ -11,7 +13,7 @@ type moviecontroller struct {
 
 func MovieHandler(router *gin.Engine, service coremovie.Service) {
 	mc := movieController(router, service)
-	router.GET("/movies", mc.ListMovie)
+	router.GET("/movies", mc.ListMovieController)
 }
 
 func movieController(router *gin.Engine, service coremovie.Service) MovieController {
@@ -21,10 +23,12 @@ func movieController(router *gin.Engine, service coremovie.Service) MovieControl
 }
 
 type MovieController interface {
-	ListMovie(c *gin.Context)
+	ListMovieController(c *gin.Context)
 }
 
-func (mc moviecontroller) ListMovie(c *gin.Context) {
-	// service := coremovie.ser
+func (mc moviecontroller) ListMovieController(c *gin.Context) {
+	fmt.Println("hi")
+	a := mc.service.ListMovie()
+	fmt.Println(a, "a")
 
 }
