@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	coremovie "github.com/Ekkawin/golang/server/core/movie"
+	// initializeDb "github.com/Ekkawin/golang/server/datamodel/initialDB"
 	"github.com/Ekkawin/golang/server/pkg/apimovie"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -31,7 +32,9 @@ func main() {
 	myRouter.Use(cors.Default())
 
 	movieService := coremovie.NewService(db)
-	apimovie.MovieHandler(myRouter, movieService)
+	movieController := apimovie.MovieHandler(movieService)
+
+	myRouter.GET("/movies", movieController.ListMovieController)
 
 	// au := apiuser.NewGetUserHandler(db)
 

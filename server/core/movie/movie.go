@@ -18,14 +18,23 @@ func NewService(db *gorm.DB) Service {
 }
 
 type Service interface {
-	ListMovie() datamodel.Movie
+	ListMovie() []datamodel.Movie
 }
 
-func (s *service) ListMovie() datamodel.Movie {
-	var movie datamodel.Movie
-	fmt.Println("hello%+v", movie)
-	s.pg.First(&movie)
-	fmt.Println("hello2%+v", movie)
-	return movie
+func (s *service) ListMovie() []datamodel.Movie {
+	var movies []datamodel.Movie
+	// var actors []datamodel.Actor
+
+	db := s.pg.Preload("Director")
+	db.Preload("Actors").Preload("Generes").Limit(10).Offset(1).Order("Title desc").Find(&movies)
+
+	// Joins("left join directors ON movies.director_id = directors.director_id")
+
+	// .Joins("JOIN directos ON movies.director_id = directors.director_id")
+
+	// s.pg.Model(&actor).Association("Movie").Find(&movies)
+	fmt.Println(movies, "movie")
+
+	return movies
 
 }

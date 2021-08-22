@@ -12,6 +12,7 @@ type Movie struct {
 	Actors      []Actor  `gorm:"many2many:movie_actors;"`
 	Generes     []Genere `gorm:"many2many:movie_generes;"`
 	DirectorID  uuid.UUID
+	Director    Director
 	Rank        string
 	Year        string
 	RunTime     string
