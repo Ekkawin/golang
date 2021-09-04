@@ -1,15 +1,17 @@
-import './App.css';
-import './style.css';
-import './tailwind.css';
-import { Switch, Route } from 'react-router-dom';
-import { LoginPage } from './features/LoginPage';
-import { RegisterPage } from './features/RegisterPage';
+import "./App.css";
+import "./style.css";
+import "./tailwind.css";
+import { Switch, Route } from "react-router-dom";
+import { LoginPage } from "./features/LoginPage";
+import { RegisterPage } from "./features/RegisterPage";
+import { HomePage } from "./features/HomePage";
 
 function App() {
   return (
     <Switch>
       <Route exact path="/">
-        <LoginPage />
+        {/* <LoginPage /> */}
+        <HomePage />
       </Route>
       <Route path="/register">
         <RegisterPage />

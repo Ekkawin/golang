@@ -7,6 +7,7 @@ import (
 	coremovie "github.com/Ekkawin/golang/server/core/movie"
 	"github.com/Ekkawin/golang/server/datamodel"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type movieListHandler struct {
@@ -22,8 +23,10 @@ func MovieHandler(service coremovie.Service) MovieController {
 
 type MovieController interface {
 	ListMovieController(c *gin.Context)
+	GetMovieController(c *gin.Context)
 	CreateMovieController(c *gin.Context)
 	UpdateMovieController(c *gin.Context)
+	DeleteMovieController(c *gin.Context)
 }
 
 func (mc *movieListHandler) ListMovieController(c *gin.Context) {
@@ -77,5 +80,55 @@ func (mc *movieListHandler) UpdateMovieController(c *gin.Context) {
 		"message": "success",
 		"movieId": m,
 	})
+
+}
+func (mc *movieListHandler) DeleteMovieController(c *gin.Context) {
+
+	id := c.Param("movieId")
+
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "movieId is required"})
+		return
+	}
+	movieId, parseErr := uuid.Parse(id)
+	if parseErr != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": parseErr.Error()})
+		return
+
+	}
+
+	err := mc.service.DeleteMovie(movieId)
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+
+	// c.JSON(200, gin.H{
+	// 	"message": "success",
+	// 	err
+	// })
+	c.JSON(http.StatusOK, err)
+
+}
+
+func (mc *movieListHandler) GetMovieController(c *gin.Context) {
+	id := c.Param("movieId")
+
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "movieId is required"})
+		return
+	}
+	movieId, parseErr := uuid.Parse(id)
+	if parseErr != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": parseErr.Error()})
+		return
+
+	}
+
+	movie, err := mc.service.GetMovie(movieId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	c.JSON(http.StatusOK, movie)
 
 }

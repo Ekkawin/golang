@@ -35,8 +35,10 @@ func main() {
 	movieController := apimovie.MovieHandler(movieService)
 
 	myRouter.GET("/movies", movieController.ListMovieController)
+	myRouter.GET("/movies/:movieId", movieController.GetMovieController)
 	myRouter.POST("/movies", movieController.CreateMovieController)
 	myRouter.PUT("/movies", movieController.UpdateMovieController)
+	myRouter.DELETE("/movies/:movieId", movieController.DeleteMovieController)
 
 	// au := apiuser.NewGetUserHandler(db)
 

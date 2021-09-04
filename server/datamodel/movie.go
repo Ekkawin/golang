@@ -9,8 +9,8 @@ type Movie struct {
 	MovieID     uuid.UUID `gorm:"primaryKey"`
 	Title       string
 	Description string
-	Actors      []Actor  `gorm:"many2many:movie_actors;"`
-	Generes     []Genere `gorm:"many2many:movie_generes;"`
+	Actors      []Actor  `gorm:"many2many:movie_actors; OnDelete:SET NULL;"`
+	Generes     []Genere `gorm:"many2many:movie_generes; OnDelete:SET NULL;;"`
 	DirectorID  uuid.UUID
 	Director    Director
 	Rank        string
