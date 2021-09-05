@@ -6,10 +6,10 @@ import (
 )
 
 type Actor struct {
-	ActorID   uuid.UUID `gorm:"primaryKey"`
-	FirstName string
-	LastName  string
-	Movies    []Movie `gorm:"many2many:movie_actors;"`
+	ActorID   uuid.UUID `gorm:"primaryKey" json:"actorId"`
+	FirstName string    `json:"firstName"`
+	LastName  string    `json:"lastName"`
+	Movies    []Movie   `gorm:"many2many:movie_actors;" json:"movies"`
 }
 
 func (a *Actor) BeforeCreate(tx *gorm.DB) (err error) {

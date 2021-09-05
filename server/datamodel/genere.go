@@ -6,9 +6,9 @@ import (
 )
 
 type Genere struct {
-	GenereID uuid.UUID `gorm:"primaryKey"`
-	Name     string
-	Movies   []Movie `gorm:"many2many:movie_generes;"`
+	GenereID uuid.UUID `gorm:"primaryKey" json:"genereId"`
+	Name     string    `json:"name"`
+	Movies   []Movie   `gorm:"many2many:movie_generes;" json:"movies"`
 }
 
 func (g *Genere) BeforeCreate(tx *gorm.DB) (err error) {

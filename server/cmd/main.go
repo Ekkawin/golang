@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	coremovie "github.com/Ekkawin/golang/server/core/movie"
-	// initializeDb "github.com/Ekkawin/golang/server/datamodel/initialDB"
+	initializeDb "github.com/Ekkawin/golang/server/datamodel/initialDB"
 	"github.com/Ekkawin/golang/server/pkg/apimovie"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -24,7 +24,7 @@ func main() {
 	dsn := "host=localhost user=aek password=aek dbname=todo_list port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
-	// initializeDb.InitializeInformationDb(db)
+	initializeDb.InitializeInformationDb(db)
 	fmt.Println(err)
 
 	// // myRouter := mux.NewRouter()
