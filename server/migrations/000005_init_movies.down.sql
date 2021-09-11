@@ -1,5 +1,4 @@
-BEGIN;
+
 
 DELETE FROM "movies" 
 
-END;
