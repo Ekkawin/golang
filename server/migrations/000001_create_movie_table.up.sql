@@ -38,15 +38,15 @@ CREATE TABLE "generes" (
 CREATE TABLE "movie_actors" (
     "actor_actor_id" text NOT NULL,
     "movie_movie_id" text NOT NULL,
-    CONSTRAINT "fk_movie_actors_movie" FOREIGN KEY ("movie_movie_id") REFERENCES "movies"("movie_id"),
-    CONSTRAINT "fk_movie_actors_actor" FOREIGN KEY ("actor_actor_id") REFERENCES "actors"("actor_id"),
+    CONSTRAINT "fk_movie_actors_movie" FOREIGN KEY ("movie_movie_id") REFERENCES "movies"("movie_id") ON DELETE CASCADE,
+    CONSTRAINT "fk_movie_actors_actor" FOREIGN KEY ("actor_actor_id") REFERENCES "actors"("actor_id") ON DELETE CASCADE,
     PRIMARY KEY ("actor_actor_id","movie_movie_id")
 );
 
 CREATE TABLE "movie_generes" (
     "genere_genere_id" text NOT NULL,
     "movie_movie_id" text NOT NULL,
-    CONSTRAINT "fk_movie_generes_genere" FOREIGN KEY ("genere_genere_id") REFERENCES "generes"("genere_id"),
-    CONSTRAINT "fk_movie_generes_movie" FOREIGN KEY ("movie_movie_id") REFERENCES "movies"("movie_id"),
+    CONSTRAINT "fk_movie_generes_genere" FOREIGN KEY ("genere_genere_id") REFERENCES "generes"("genere_id") ON DELETE CASCADE,
+    CONSTRAINT "fk_movie_generes_movie" FOREIGN KEY ("movie_movie_id") REFERENCES "movies"("movie_id") ON DELETE CASCADE,
     PRIMARY KEY ("genere_genere_id","movie_movie_id")
 );
